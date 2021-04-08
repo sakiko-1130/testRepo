@@ -34,5 +34,18 @@
             <input id="add-button" type="button" value="Picture And Save" onclick="addTodoPicture()"  data-theme="b">
         </div>
     </div>
+
+    <div data-role="page" id="edit-page">
+        <div data-role="header" data-position="fixed" data-theme="c">
+            <h1>編集画面</h1>
+            <a href="#list-page" data-icon="back" class="ui-btn-left">back</a>
+        </div>
+        <div data-role="content">
+            <input id="todo-title" type="text" value="">
+            <textarea id="todo-body" style="height: 8em" value=""></textarea>
+            <input type="datetime-local" id="todo-datetime">
+            <input id="add-button" type="button" value="Edit" onclick="addTodo()">
+        </div>
+    </div>
 </body>
 </html>
