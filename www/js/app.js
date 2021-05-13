@@ -48,3 +48,13 @@ function editTodo(){
   var todoValue = JSON.stringify(obj);
   localStorage.setItem(taskId, todoValue);
 }
+
+function deleteTodo(todoKey){
+  if(window.confirm("削除しますか？")){
+    sessionStorage.removeItem(todoKey);
+
+    // 再読み込みどっちを使うか確認したら削除する
+    $("#todo-list").listview('refresh');
+    // location.reload();
+  }
+}
