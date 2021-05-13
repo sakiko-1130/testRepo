@@ -6,3 +6,29 @@
 .ua-ios-7 .ui-header, .ua-ios-8 .ui-header {
     top: 20px;
 }
+
+.titleList {
+  text-decoration: none;
+  color:black;
+}
+
+.oneTitle {
+  border: 1px solid #ccc;
+  background: #f1e767;
+  background: -webkit-gradient(linear, left top, left bottom, from(#fdfbfb), to(#ebedee));
+  background: -webkit-linear-gradient(top, #fdfbfb 0%, #ebedee 100%);
+  background: linear-gradient(to bottom, #fdfbfb 0%, #ebedee 100%);
+  -webkit-box-shadow: inset 1px 1px 1px #fff;
+  box-shadow: inset 1px 1px 1px #fff;
+}
+
+.aTitle:hover, .aDelete:hover {
+  cursor:pointer;
+  background: -webkit-gradient(linear, left bottom, left top, from(#fdfbfb), to(#ebedee));
+  background: -webkit-linear-gradient(bottom, #fdfbfb 0%, #ebedee 100%);
+  background: linear-gradient(to top, #fdfbfb 0%, #ebedee 100%);
+} 
+
+.aTitle:active, .aDelete:active {
+  background-color:rgb(197, 190, 190);
+}
