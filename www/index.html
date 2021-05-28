@@ -28,9 +28,9 @@
             <a href="#list-page" data-icon="back" class="ui-btn-left">back</a>
         </div>
         <div data-role="content">
-            <input id="todo-title" type="text" placeholder="TODO Title">
-            <textarea id="todo-body" style="height: 8em" placeholder="Description"></textarea>
-            <input type="datetime-local" id="todo-datetime">
+            <input id="add-todo-title" type="text" placeholder="TODO Title">
+            <textarea id="add-todo-body" style="height: 8em" placeholder="Description"></textarea>
+            <input type="datetime-local" id="add-todo-datetime">
             <input id="add-button" type="button" value="Save" onclick="addTodo()">
             <input id="add-button" type="button" value="Picture And Save" onclick="addTodoPicture()"  data-theme="b">
         </div>
@@ -42,10 +42,11 @@
             <a href="#list-page" data-icon="back" class="ui-btn-left">back</a>
         </div>
         <div data-role="content">
-            <input id="todo-title" type="text" value="">
-            <textarea id="todo-body" style="height: 8em" value=""></textarea>
-            <input type="datetime-local" id="todo-datetime">
-            <input id="add-button" type="button" value="Edit" onclick="addTodo()">
+            <input id="edit-todo-title" type="text" value="">
+            <textarea id="edit-todo-body" style="height: 8em" value=""></textarea>
+            <input type="datetime-local" id="edit-todo-datetime">
+            <input id="edit-button" type="button" value="Edit"
+            onclick="editTodo()">
         </div>
     </div>
 </body>
