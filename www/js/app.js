@@ -10,9 +10,9 @@ function addTodoPicture() {
 }
 
 function addTodo(camera_url) {
-  var title = $("#todo-title").val();
-  var body = $("#todo-body").val();
-  var datetime = $("#todo-datetime").val();
+  var title = $("#add-todo-title").val();
+  var body = $("#add-todo-body").val();
+  var datetime = $("#add-todo-datetime").val();
   var img_tag = "";
   if (camera_url) {
       img_tag = "<img src='data:image/jpeg;base64," + camera_url + "'>";
@@ -34,19 +34,63 @@ function addTodo(camera_url) {
   $("#todo-list").listview('refresh');
 };
 
-window.addEventListener("load", function(){
+window.addEventListener("load", function(event){
   showTask();
 },false);
 
-function editLoadPage(todoKey){
-  
+/*
+ * 編集画面表示
+*/
+function editLoadPage(taskNo){
   // ローカルストレージの値を取得
-  var toDo = JSON.parse(localStorage.getItem(todoKey));
+  var toDo = JSON.parse(localStorage.getItem(taskNo));
 
   // 値設定
-  $("#todo-title").val(toDo.title);
-  $("#todo-body").val(toDo.body);
-  $("#todo-datetime").val(toDo.datetime);
+  document.getElementById('edit-todo-title').value = toDo.title;
+  document.getElementById('edit-todo-body').value = toDo.body;
+  document.getElementById('edit-todo-datetime').value = toDo.datetime;
+
+  // タスクNoを設定
+  document.getElementById("edit-button").setAttribute("onclick","editTodo('"+ taskNo +"')");
+}
+
+/*
+ * ToDo編集
+*/
+function editTodo(taskNo){
+  var title = $("#edit-todo-title").val();
+  var body = $("#edit-todo-body").val();
+  var datetime = $("#edit-todo-datetime").val();
+
+  var taskNo = taskNo;
+  var array = [];
+  var obj = {
+    'title':title,
+    'body':body,
+    'datetime':datetime
+  };
+  array.push(obj);
+
+  var todoValue = JSON.stringify(obj);
+  localStorage.setItem(taskNo, todoValue);
+
+  $.mobile.changePage($("#list-page"));
+  var list = makeListHtml(taskNo);
+  $("#todo-list").append(list);
+  $("#todo-list").listview('refresh')
+}
+
+/*
+ * ToDo削除
+*/
+function deleteTodo(taskNo){
+  if(window.confirm("削除しますか？")){
+    localStorage.removeItem(taskNo);
+
+    var list = makeListHtml('task' + taskNo);
+    $("#todo-list").append(list);
+    $("#todo-list").listview('refresh');
+  }
 }
 
 function showTask(){
@@ -63,34 +107,6 @@ function showTask(){
 */
 function _getTaskCount(){
   return parseInt(localStorage.getItem("taskId"));
-}
-
-function editTodo(taskNo){
-  var title = $("#todo-title").val();
-  var body = $("#todo-body").val();
-  var datetime = $("#todo-datetime").val();
-
-  var taskId = taskNo;
-  var array = [];
-  var obj = {
-    'title':title,
-    'body':body,
-    'datetime':datetime
-  };
-  array.push(obj);
-
-  var todoValue = JSON.stringify(obj);
-  localStorage.setItem(taskId, todoValue);
-}
-
-function deleteTodo(todoKey){
-  if(window.confirm("削除しますか？")){
-    sessionStorage.removeItem(todoKey);
-
-    // 再読み込みどっちを使うか確認したら削除する
-    $("#todo-list").listview('refresh');
-    // location.reload();
-  }
 }
 
 /**
@@ -119,6 +135,6 @@ function _zeroPadding(num,length){
 /* Liタグ作成処理 */
 function makeListHtml(taskNo){
  var obj = JSON.parse(localStorage.getItem(taskNo));
- var record = "<li class=\"oneTitle\">" + "<a href=\"#edit-page\" class=\"aTitle\" onclick=\"editTodo(\'" + taskNo + "\')\" data-role=\"button\" class=\"titleList\" ><h3>" + obj.title + "</h3></a><a href=\"./\" class=\"aDelete\" data-icon=\"minus\" data-theme=\"c\" onclick=\"deleteTodo(\'" + taskNo + "\')\"></a></li>";
+ var record = "<li class=\"oneTitle\">" + "<a href=\"#edit-page\" class=\"aTitle\" onclick=\"editLoadPage(\'" + taskNo + "\')\" data-role=\"button\" class=\"titleList\" ><h3>" + obj.title + "</h3></a><a href=\"./\" class=\"aDelete\" data-icon=\"minus\" data-theme=\"c\" onclick=\"deleteTodo(\'" + taskNo + "\')\"></a></li>";
  return record;
 }
