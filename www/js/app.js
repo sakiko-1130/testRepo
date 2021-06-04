@@ -1,36 +1,18 @@
-function addTodoPicture() {
-    navigator.camera.getPicture(addTodo, function() {
-        alert("Failed to get camera.");
-    }, {
-        quality : 50,
-        destinationType : Camera.DestinationType.DATA_URL,
-        targetWidth : 100,
-        targetHeight : 100
-    });
-}
-
-function addTodo(camera_url) {
+function addTodo() {
   var title = $("#add-todo-title").val();
   var body = $("#add-todo-body").val();
   var datetime = $("#add-todo-datetime").val();
-  var img_tag = "";
-  if (camera_url) {
-      img_tag = "<img src='data:image/jpeg;base64," + camera_url + "'>";
-  }
-  $.mobile.changePage($("#list-page"));
   var taskId = _getNewTaskId();
-  var array = [];
   var obj = {
   'title':title,
   'body':body,
   'datetime':datetime
   };
-  array.push(obj);
   var todoValue = JSON.stringify(obj);
   localStorage.setItem('task' + taskId, todoValue);// {task00X : タスク内容}が保存される
   $.mobile.changePage($("#list-page"));
-  var list = makeListHtml('task' + taskId);
-  $("#todo-list").append(list);
+  $('#todo-list li').remove();
+  showTask();
   $("#todo-list").listview('refresh');
 };
 
@@ -62,22 +44,19 @@ function editTodo(taskNo){
   var body = $("#edit-todo-body").val();
   var datetime = $("#edit-todo-datetime").val();
 
-  var taskNo = taskNo;
-  var array = [];
   var obj = {
     'title':title,
     'body':body,
     'datetime':datetime
   };
-  array.push(obj);
 
   var todoValue = JSON.stringify(obj);
   localStorage.setItem(taskNo, todoValue);
 
   $.mobile.changePage($("#list-page"));
-  var list = makeListHtml(taskNo);
-  $("#todo-list").append(list);
-  $("#todo-list").listview('refresh')
+  $('#todo-list li').remove();
+  showTask();
+  $("#todo-list").listview('refresh');
 }
 
 /*
@@ -87,8 +66,8 @@ function deleteTodo(taskNo){
   if(window.confirm("削除しますか？")){
     localStorage.removeItem(taskNo);
 
-    var list = makeListHtml('task' + taskNo);
-    $("#todo-list").append(list);
+    $('#todo-list li').remove();
+    showTask();
     $("#todo-list").listview('refresh');
   }
 }
@@ -96,8 +75,11 @@ function deleteTodo(taskNo){
 function showTask(){
   var count = _getTaskCount();
   for(var i=1; i <= count; i++) {
-    var list = makeListHtml('task' + _zeroPadding(i, 3));
-    $("#todo-list").append(list);
+    var taskNo = 'task' + _zeroPadding(i, 3);
+    if(localStorage.getItem(taskNo)){
+      var list = makeListHtml(taskNo);
+      $("#todo-list").append(list);
+    }
   }
   $("#todo-list").listview('refresh');
 }
@@ -137,4 +119,14 @@ function makeListHtml(taskNo){
  var obj = JSON.parse(localStorage.getItem(taskNo));
  var record = "<li class=\"oneTitle\">" + "<a href=\"#edit-page\" class=\"aTitle\" onclick=\"editLoadPage(\'" + taskNo + "\')\" data-role=\"button\" class=\"titleList\" ><h3>" + obj.title + "</h3></a><a href=\"./\" class=\"aDelete\" data-icon=\"minus\" data-theme=\"c\" onclick=\"deleteTodo(\'" + taskNo + "\')\"></a></li>";
  return record;
+}
+
+/* TODO追加画面遷移時に入力エリアをクリア */
+function clearText(){
+ var title = document.getElementById("add-todo-title");
+ var body = document.getElementById("add-todo-body");
+ var datetime = document.getElementById("add-todo-datetime");
+ title.value = '';
+ body.value = '';
+ datetime.value = '';
 }
